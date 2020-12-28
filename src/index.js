@@ -12,12 +12,7 @@ class SheetDto{
     }
 }
 
-var data = [
-    ['', 'Ford', 'Tesla', 'Toyota', 'Honda'],
-    ['2017', 10, 11, 12, 13],
-    ['2018', 20, 11, 14, 13],
-    ['2019', 30, 15, 12, 13]
-];
+var data = [['', '']]
 
 var container = document.getElementById('table');
 
@@ -27,19 +22,41 @@ const table = jexcel(container, {
     onchange(){
         sendTable()
     },
+    oninsertrow(){
+        sendTable()
+    },
+    oninsertcolumn(){
+        sendTable()
+    },
+    ondeleterow(){
+        sendTable()
+    },
+    ondeletecolumn(){
+        sendTable()
+    },
+    onpaste(){
+        sendTable()
+    }
 })
 
-window.addEventListener("message", event => {
-    console.log(event);
-    const msg = event.data
-    table.setData(msg.table)
-})
-
-
-console.log(table.getData())
-
-const sendTable = () => {
-    const sheet = new SheetDto(table.getData(), [])
-    vscode.postMessage(sheet)
+const updateTable = (sheet) => {
+    table.setData(sheet.table)
 }
 
+window.addEventListener("message", event => {
+    const msg = event.data
+    updateTable(msg)
+    vscode.setState(msg)
+})
+
+const sendTable = () => { 
+    console.log(table.getWidth());
+    const sheet = new SheetDto(table.getData(), ("l".repeat(table.getWidth().length)).split(""))
+    vscode.postMessage(sheet)
+    vscode.setState(sheet)
+}
+
+const state = vscode.getState();
+if (state) {
+    updateTable(state);
+}
