@@ -9,5 +9,19 @@ module.exports = {
       path: path.join(__dirname, 'dist'),
       filename: 'bundle.js'
     },
-    devtool: 'source-map'
+    devtool: 'source-map',
+    module: {
+      rules: [
+        {
+          test: /\.css/,
+          use: [
+            "style-loader",
+            {
+              loader: "css-loader",
+              options: { url: false }
+            }
+          ]
+        }
+      ]
+    }
   }
