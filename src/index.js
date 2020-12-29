@@ -40,6 +40,7 @@ const table = jexcel(container, {
 })
 
 const updateTable = (sheet) => {
+    table.setWidth(0, sheet.table[0].length)
     table.setData(sheet.table)
 }
 
